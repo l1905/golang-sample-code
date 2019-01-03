@@ -19,6 +19,7 @@ var upgrader = websocket.Upgrader{
 }
 //参考: https://github.com/scotch-io/go-realtime-chat
 //https://scotch.io/bar-talk/build-a-realtime-chat-server-with-go-and-websockets
+//websocket类库 https://github.com/gorilla/websocket
 
 // 定义消息结构体
 type Message struct {
