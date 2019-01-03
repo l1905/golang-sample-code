@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    textarea {
+        overflow-y: scroll;
+        resize: none;
+    }
+</style>
+
+<p>简易学习聊天室(在线人数<span id="online_num">0</span>人)</p>
+
+<textarea rows="14" cols="50" id="totalInput" placeholder="聊天信息" readonly>
+</textarea>
+<br>
+<input type = "text" id="inputText" placeholder="请输入新消息"> </input>
+<button onclick="myClick()" >点击发送</button>
+<script>
+    var ws = new WebSocket("ws://127.0.0.1:7777/ssh");
+
+    function myClick() {
+        console.log('click...myClick');
+        var input_doc = document.getElementById("inputText").value;
+        data = {data_type: 'input', data_msg : input_doc};
+        ws.send(JSON.stringify(data));
+    }
+
+    ws.onopen = function(evt) {
+        data = {data_type: 'join', data_msg : "1"};
+        //data = {email: "litong@smzdm.com", username: "litongxue", message: "ddddd"}
+        console.log("Connection open ...");
+        ws.send(JSON.stringify(data));
+    };
+
+    ws.onmessage = function(evt) {
+        var resp = JSON.parse(evt.data);
+
+        if(resp.data_type == 'join-resp')
+        {
+            document.getElementById("online_num").textContent = resp.data_msg;
+        } else if(resp.data_type == "input-resp")
+        {
+            document.getElementById("totalInput").value = document.getElementById("totalInput").value + resp.data_msg + "\n";
+        } else {
+            console.log('unkown msg type...');
+        }
+        console.log( "Received Message: " + evt.data);
+        //ws.close();
+
+    };
+
+    ws.onclose = function(evt) {
+        console.log("Connection closed.");
+    };
+
+
+</script>
+</body>
+</html>
