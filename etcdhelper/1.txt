@@ -1,0 +1,6 @@
+跨平台构建
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build etcdhelper.go
+
+参考: https://github.com/openshift/origin/tree/master/tools/etcdhelper
+
+主要是删除对openshift依赖
