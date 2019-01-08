@@ -7,6 +7,12 @@ json相关基本操作
 https://sanyuesha.com/2018/05/07/go-json/
 https://eager.io/blog/go-and-json/
 https://golang.org/pkg/encoding/json/
+
+
+核心点：
+数据结构序列化为json
+json反序列化为数据结构
+
  */
 
 import (
