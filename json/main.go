@@ -29,7 +29,7 @@ type User struct {
 	Email    string
 	Phone    string
 
-	city     string //只能序列化exported filed, 即首字母大写， 该字段小写，会被过滤掉
+	city     string //只能序列化exported filed, 即首字母大写， 该字段小写，私有，会被过滤掉
 	Country	 string
 }
 
