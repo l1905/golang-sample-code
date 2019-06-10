@@ -36,10 +36,7 @@ func main() {
 	print_text := guahao.Regex(body_str, date_zone, time)
 
 	fmt.Println(print_text)
-	//发送报警
-	if len(print_text) > 0 {
-		//发送报警 微信 && 钉钉
-		guahao.SendAlarm(print_text)
-	}
+	//发送报警 微信 && 钉钉
+	guahao.SendAlarm(print_text)
 
 }
