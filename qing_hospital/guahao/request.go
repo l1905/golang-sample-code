@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 )
 
 
@@ -18,7 +19,9 @@ func RquestChanke() (body_str string)  {
 	//body, err := ioutil.ReadAll(resp.Body)
 	//
 	//fmt.Println(string(body))
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: time.Second * 3,
+	}
 
 	req, err := http.NewRequest("GET", url, nil)
 
@@ -64,7 +67,9 @@ func RquestFuke() (body_str string)  {
 	//body, err := ioutil.ReadAll(resp.Body)
 	//
 	//fmt.Println(string(body))
-	client := &http.Client{}
+	client := &http.Client{
+		Timeout: time.Second * 3,
+	}
 
 	req, err := http.NewRequest("GET", url, nil)
 
