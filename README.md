@@ -1,2 +1,2 @@
-# golang-sample-code
-收集日常开发中比较实用的golang代码
+# 学习golang过程
+记录学习golang 经过
