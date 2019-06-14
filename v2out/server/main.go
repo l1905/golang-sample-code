@@ -4,24 +4,55 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/binary"
+	"flag"
+	"io"
 	"log"
 	"net"
+	"v2out/log_simple"
 )
 
 const buf_size=8192
+
+var (
+	//qlog *logs.QlogData
+	WarningLog *log.Logger
+	ErrorLog * log.Logger
+	qlogWrite log_simple.Qwriter
+	qlog *log_simple.QlogData
+
+	listen_port string
+)
+
+func init() {
+
+
+	flag.StringVar(&listen_port, "listen_port", "8082", "监听端口地址，默认是8082")
+
+
+	qlog := log_simple.NewQlogData()
+	qlogWrite = qlog
+
+	ErrorLog = log.New(io.MultiWriter(qlogWrite),"Error:",log.Ldate | log.Ltime | log.Lshortfile)
+	WarningLog = log.New(io.MultiWriter(qlogWrite),"Warn:",log.Ldate | log.Ltime | log.Lshortfile)
+	go qlog.Consume()
+
+
+}
+
 func main() {
-	log.SetFlags(log.LstdFlags|log.Lshortfile)
-	l, err := net.Listen("tcp", ":8082")
+	flag.Parse()
+
+	l, err := net.Listen("tcp", ":"+listen_port)
 	if err != nil {
-		log.Panic(err)
+		ErrorLog.Panic(err)
 	}
 
 	for {
 		client, err := l.Accept()
 		if err != nil {
-			log.Panic(err)
+			ErrorLog.Panic(err)
 		}
-		log.Println("server 建立连接")
+		ErrorLog.Println("server 建立连接")
 
 		//新起独立连接到 seq 正向代理
 		server, _ := net.Dial("tcp", "127.0.0.1:3128")
@@ -39,8 +70,8 @@ func handleClientRequest(client net.Conn, desc_client net.Conn) {
 	if client == nil {
 		return
 	}
-	defer client.Close()
-	defer desc_client.Close()
+	//defer client.Close()
+	//defer desc_client.Close()
 
 	var stream_buf bytes.Buffer
 
@@ -49,7 +80,7 @@ func handleClientRequest(client net.Conn, desc_client net.Conn) {
 
 		n, err := client.Read(buf)
 		if err != nil {
-			log.Println(err)
+			ErrorLog.Println(err)
 			goto RESULT
 		}
 		data := buf[:n]
@@ -93,8 +124,8 @@ func handleClientResp(client net.Conn, desc_client net.Conn) {
 	if client == nil {
 		return
 	}
-	defer client.Close()
-	defer desc_client.Close()
+	//defer client.Close()
+	//defer desc_client.Close()
 
 
 	for {
@@ -103,7 +134,7 @@ func handleClientResp(client net.Conn, desc_client net.Conn) {
 		//接收正向代理包内容
 		n, err := desc_client.Read(buf)
 		if err != nil {
-			log.Println(err)
+			ErrorLog.Println(err)
 			break
 		}
 		data := buf[:n]
@@ -120,7 +151,7 @@ func handleClientResp(client net.Conn, desc_client net.Conn) {
 
 		send_data := string(buf_02) + encode_data
 		//建立隧道，加包
-		log.Println("从正向代理接收到包")
+		//ErrorLog.Println("从正向代理接收到包")
 
 		//同等加密方式，回写给client端
 		client.Write([]byte(send_data))
