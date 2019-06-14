@@ -30,13 +30,17 @@ func main() {
 
 	//请求URL 获取返回值
 	body_str := guahao.RquestChanke()
-
 	//正则解析 获取结构内容，并且代码
 	time = strings.ToUpper(time)
 	print_text := guahao.Regex(body_str, date_zone, time)
 
 	fmt.Println(print_text)
-	//发送报警 微信 && 钉钉
-	guahao.SendAlarm(print_text)
+	//发送报警
+	if len(print_text) > 0 {
+		//发送报警 微信 && 钉钉
+		guahao.SendAlarm(print_text)
+	} else {
+		fmt.Println("暂时无数据")
+	}
 
 }
