@@ -29,7 +29,10 @@ func main() {
 	fmt.Println(time)
 
 	//请求URL 获取返回值
-	body_str := guahao.RquestChanke()
+	guahao.DingUrl = guahao.XinzhuangUrl
+	body_str := guahao.RquestHuangDaoFuchan()
+	//body_str := guahao.RquestFayu()
+	//body_str := guahao.RquestFuke()
 	//正则解析 获取结构内容，并且代码
 	time = strings.ToUpper(time)
 	print_text := guahao.Regex(body_str, date_zone, time)

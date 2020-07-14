@@ -10,8 +10,9 @@ import (
 	"time"
 )
 
-const dingUrl = "https://oapi.dingtalk.com/robot/send?access_token=dea1327c54f40fb2d71d8f292a7ebf84d5ba46fa12cac6b2b638c5b91748a31b8" //调整为自己的token
+var DingUrl = "https://oapi.dingtalk.com/robot/send?access_token=3ede76ebbb74aed0982b1decf60e781e1814c012f5e8d685ffb6162d2c8e86c9" //调整为自己的token
 const weixinUrl = "https://sc.ftqq.com/SCU110894T7d730de004034a8f8de6eca68f9ceb485993ab6b610fc.send"                                  //调整为自己的token
+const XinzhuangUrl = "https://oapi.dingtalk.com/robot/send?access_token=6931f0b8f2fb1aa304833385a6570da1ab9432cbe5f8346bf524574c4d5ec3e1"
 
 //调用app参数
 type params struct {
@@ -34,7 +35,7 @@ func SendAlarm(message string) {
 		return
 	}
 	DingAlarm(message)
-	WeixinAlarm(message)
+	//WeixinAlarm(message)
 }
 
 func DingAlarm(message string) {
@@ -49,7 +50,7 @@ func DingAlarm(message string) {
 
 	jsonStr, _ := json.Marshal(data)
 
-	req, err := http.NewRequest("POST", dingUrl, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequest("POST", DingUrl, bytes.NewBuffer(jsonStr))
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}

@@ -16,8 +16,8 @@ json反序列化为数据结构
  */
 
 import (
-	"fmt"
 	"encoding/json"
+	"fmt"
 )
 
 type Bank struct {
@@ -32,7 +32,7 @@ type User struct {
 	Birthday string `json:"-"` //序列化时， 不输出, 和字段小写不输出类似
 	BankInfo Bank `json:"bank_info"` //嵌套json 序列
 	Sex      string
-	Email    string
+	Email    string  `json:"email"` //嵌套json 序列
 	Phone    string
 
 	city     string //只能序列化exported filed, 即首字母大写， 该字段小写，私有，会被过滤掉
@@ -117,9 +117,21 @@ func json2Interface()  {
 	}
 }
 
+func twice()  {
+	// 一个对象可以连续两次作为unmarshal,的第二个参数， 新值只会更新 新字段，而不会完全覆盖
+	b := []byte(`{"Name":"Wednesday","Age":6,"Parents":["Gomez","Morticia"]}`)
+	user1 := &User{}
+	json.Unmarshal(b, user1)
+	fmt.Printf("%+v \n", user1)
+	c := []byte(`{"email":"85@qq.com"}`)
+	json.Unmarshal(c, user1)
+	fmt.Printf("%+v \n", user1)
+}
+
 func main() {
-	struct2Json()
-	json2Struct()
-	json2Interface()
+	twice()
+	//struct2Json()
+	//json2Struct()
+	//json2Interface()
 	fmt.Println("----")
 }

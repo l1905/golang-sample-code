@@ -51,8 +51,6 @@ type doctorVOList struct {
 }
 
 func Regex(text string, date_zone string, time string) (print_text string)  {
-	//fmt.Println(text)
-
 	formatRegex := regexp.MustCompile(`jsonp\d+\((.*?)\);`)
 	//类型推算使用
 	params := formatRegex.FindStringSubmatch(text)
