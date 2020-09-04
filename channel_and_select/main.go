@@ -285,3 +285,8 @@ func tickerWithRange()  {
 	}()
 }
 
+
+// 使用场景
+
+// for -range消费
+
